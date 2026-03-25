@@ -1,5 +1,5 @@
 /**
- * Will encrypt files and messages using 7-bit ASCII values and a variety of cryptography methods, i.e,
+ * test commit. Will encrypt files and messages using 7-bit ASCII values and a variety of cryptography methods, i.e,
  * 
  * - Ceasar Cipher
  * - Homophonic Cipher
