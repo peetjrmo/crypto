@@ -1,0 +1,57 @@
+					PROJECT CRYPTO NOTES
+
+		- Encoding text/files with their ASCII values and several encryption schemes.
+
+-- THOUGHTS --
+> Cast 'int' to all characters to access ASCII values
+> Need ASCII values to map/convert all characters
+
+-- MAIN --
+> Get text file from command line run OR prompt and store message from user
+> Prompt for cipher choice
+> Call choice, passing either the file or the message
+> ...
+
+
+-- CEASAR --
+> Get plaintext from params
+> Get key (int)
+> Loop through characters, {
+	
+	- Get ASCII index (val)
+	- Increment ASCII index by key amount (val += key)
+		if val > Max ASCII index (127) {
+
+			- Modulus to get value in range [0, 127]
+		}
+	- Get new ASCII
+	- Append to new string (cipher) 
+  }
+
+> Print cipher to screen
+
+
+-- HOMOPHONIC --
+> Create correspondence table for alphabet
+	- Each letter will have # of mappings equal to standard frequency (rounded
+	  to nearest whole, 1 if < 1.00) of each letter
+	- Each mapping will be a 2 digit integer, randomly selected for each occurrence 
+	  using a RNG
+	- CORRESPONDENCE: 	A : 9		B : 2		C : 3		D : 4
+				E : 12		F : 2		G : 2		H : 5
+				I : 7 		J : 1		K : 1		L : 4
+				M : 3		N : 7 		O : 7		P : 2
+				Q : 1		R : 6		S : 7		T : 9
+				U : 3		V : 1		W : 2		X : 1
+				Y : 2		Z : 1
+
+> 
+				
+
+-- POLYGRAM --
+
+-- POLYALPHA --
+
+-- PLAYFAIR --
+
+-- HILL --
