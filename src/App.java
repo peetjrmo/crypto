@@ -41,8 +41,7 @@ public class App {
 
         switch (opt) {
 
-            case 1 :    System.out.print("Enter message: ");
-                        plain = in.nextLine();
+            case 1 :    plain = getMessage();
 
                         key = getKey();
 
@@ -54,8 +53,7 @@ public class App {
             case 2 :    Map<Character, ArrayList<Integer>> map = new HashMap<>();
                         ArrayList<Integer> cipherList = new ArrayList<>();
 
-                        System.out.print("Enter message: ");
-                        plain = in.nextLine();
+                        plain = getMessage();
 
                         cipherList = homophonic(plain, map);
                         plain = homoPhonicX(cipherList, map);
@@ -65,8 +63,7 @@ public class App {
 
                         break;
 
-            case 5 :    System.out.println("Enter message: ");
-                        plain = in.nextLine();
+            case 5 :    plain = getMessage();
 
                         Map<String, Integer> cipherMap = new LinkedHashMap<>();
 
@@ -474,6 +471,17 @@ public class App {
     public static String hillX() {
 
         return "";
+    }
+
+    public static String getMessage() {
+
+        Scanner in = new Scanner(System.in);
+        String message;
+
+        System.out.print("Enter message : ");
+        message = in.nextLine();
+
+        return message;
     }
 
     /**
