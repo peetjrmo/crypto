@@ -64,6 +64,10 @@ public class App {
 
                         break;
 
+            case 3 :    
+
+            case 4 :
+
             case 5 :    plain = getMessage();
 
                         Map<String, Integer> cipherMap = new LinkedHashMap<>();
@@ -72,6 +76,8 @@ public class App {
                         
                         
                         break;
+
+            case 6 : 
         }
     }
 
@@ -203,6 +209,26 @@ public class App {
         }
         
         return plain;
+    }
+
+    public static String vigenere() {
+
+        return "";
+    }
+
+    public static String vigenereX() {
+
+        return "";
+    }
+
+    public static String affine() {
+
+        return "";
+    }
+
+    public static String affineX() {
+
+        return "";
     }
 
 
@@ -628,6 +654,11 @@ public class App {
         }
 
         return exist;
+    }
+
+    public static String toUpper(String text) {
+
+        return "";
     }
 
     /**
