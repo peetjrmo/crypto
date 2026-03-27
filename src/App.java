@@ -3,7 +3,8 @@
  * 
  * - Ceasar Cipher
  * - Homophonic Cipher
- * - Polygram Cipher
+ * - Vigenere Cipher
+ * - Affine Cipher
  * - Playfair Cipher
  * - Hill Cipher
  * 
@@ -66,8 +67,9 @@ public class App {
             case 5 :    plain = getMessage();
 
                         Map<String, Integer> cipherMap = new LinkedHashMap<>();
-
                         cipherMap = playfair(plain);
+
+                        
                         
                         break;
         }
@@ -220,6 +222,7 @@ public class App {
         final int SECOND = 1;
 
         int curr = 0;
+        String cipherString = "";
         char[][] grid = new char[MAX_ROWS][MAX_COLUMNS];
         Map<Character, ArrayList<Integer>> coordinates = new HashMap<>();
         Map<String, Integer> cipher = new LinkedHashMap<>();
@@ -282,10 +285,16 @@ public class App {
             int secondRow       = coordinates.get(pairs.get(i).charAt(SECOND)).get(ROW);
             int secondColumn    = coordinates.get(pairs.get(i).charAt(SECOND)).get(COLUMN);
 
+            if (cipher.containsKey(pairs.get(i))) {
+
+                cipherString += cipher.get(pairs.get(i));
+            }
+
             if (pairs.get(i).charAt(0) == pairs.get(i).charAt(1)) {
                 
                 cipher.put(pairs.get(i).charAt(0) + "X" + pairs.get(i).charAt(1), 0);
                 pairs.set(i, pairs.get(i).charAt(0) + "X" + pairs.get(i).charAt(1));
+                cipherString += pairs.get(i).charAt(0) + "X" + pairs.get(i).charAt(1);
                 
                 System.out.println(pairs);
 
@@ -315,6 +324,7 @@ public class App {
                 }
                 
                 cipher.put("" + grid[firstRow][newColumn] + grid[firstRow][newColumn2], 1);
+                cipherString += "" + grid[firstRow][newColumn] + grid[firstRow][newColumn2];
 
             } else if (coordinates.get(pairs.get(i).charAt(FIRST)).get(COLUMN) == coordinates.get(pairs.get(i).charAt(SECOND)).get(COLUMN)) {   // if pair is in same column
 
@@ -341,17 +351,20 @@ public class App {
                 }
 
                 cipher.put("" + grid[newRow][firstColumn] + grid[newRow2][secondColumn], 2);
+                cipherString += "" + grid[newRow][firstColumn] + grid[newRow2][secondColumn];
 
 
             } else if (coordinates.get(pairs.get(i).charAt(FIRST)).get(ROW) != coordinates.get(pairs.get(i).charAt(SECOND)).get(ROW) &&
                         coordinates.get(pairs.get(i).charAt(FIRST)).get(COLUMN) != coordinates.get(pairs.get(i).charAt(SECOND)).get(COLUMN)) {  // if pair is in different column and row
 
                 cipher.put("" + grid[firstRow][secondColumn] + grid[secondRow][firstColumn], 3);
+                cipherString += "" + grid[firstRow][secondColumn] + grid[secondRow][firstColumn];
             }
             
         }
 
         System.out.println(cipher);
+        System.out.println("Cipher String: " + cipherString);
         playfairX(cipher, grid, coordinates, padded);
         return cipher;
     }
@@ -374,8 +387,7 @@ public class App {
         final int SECOND = 1;
         
         String plain = "";
-        int algo = 0;
-        String temp = "";
+        int algo;
 
         for (Map.Entry<String, Integer> entry : cipher.entrySet()) {
             
@@ -628,7 +640,8 @@ public class App {
         Scanner in = new Scanner(System.in);
         int opt;
 
-        System.out.println("1) Ceasar\n2) Homophonic\n3) Polygram\n4) Polyalpha\n5) Playfair\n6) Hill\n");
+        System.out.println("Chhose encryption method :\n");
+        System.out.println("1) Ceasar\n2) Homophonic\n3) Vigenere\n4) Affine\n5) Playfair\n6) Hill\n");
         opt = in.nextInt();
 
         return opt;
