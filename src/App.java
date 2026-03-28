@@ -21,7 +21,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
-
 public class App {
 
     static int key;
@@ -66,7 +65,15 @@ public class App {
 
             case 3 :    String keyword = getKeyword().toUpperCase();
                         plain = parseString(getMessage()).toUpperCase();
-                        vigenere(plain, keyword);
+                        String mirror = getMirror(plain, keyword);
+                        
+                        cipher = vigenere(plain, mirror);
+                        print("Plain : " + plain);
+                        
+                        plain = vigenereX(cipher, getMirror(plain, keyword));
+                        print("CIPHER : " + cipher);
+                        print("PLAIN : " + plain);
+                        break;
 
             case 4 :
 
@@ -75,12 +82,13 @@ public class App {
                         System.exit(0);
                         Map<String, Integer> cipherMap = new LinkedHashMap<>();
                         cipherMap = playfair(plain);
-
-                        
-                        
                         break;
 
             case 6 : 
+
+
+            case 7 :    print("Bye!");
+                        break;
         }
     }
 
@@ -482,35 +490,52 @@ public class App {
         return plain;
     }
 
-    public static String vigenere(String plain, String keyword) {
+    public static String vigenere(String plain, String mirror) {
 
         String cipher = "";
-        String mirror = "";
-        int curr = 0;
 
-        for (char c : plain.toCharArray()) {
+        for (int i = 0; i < plain.length(); ++i) {
+            
 
-            if (curr == keyword.length()) {
+            if ((int)plain.charAt(i) + (int)mirror.charAt(i) > 25) {
 
-                curr = 0;
-            } 
+                cipher += (char)((((int)plain.charAt(i) + (int)mirror.charAt(i)) % 26) + 65);
 
-            mirror += keyword.charAt(curr);
-            curr++;
+            } else {
 
+                cipher += (char)((int)plain.charAt(i) + (int)mirror.charAt(i));
+            }
         }
-
-        System.out.println(mirror);
 
         return cipher;
     }
 
-    public static String vigenereX(String cipher) {
+    public static String vigenereX(String cipher, String mirror) {
 
         String plain = "";
+        int index = 0;
+
+        for (int i = 0; i < cipher.length(); ++i) {
+
+            index = (int)cipher.charAt(i) - (int)mirror.charAt(i);
+            System.out.println("Index : " + index);
+
+            if (index < 0) {
+
+                // -7 --> 84 = 91
+                // -4 --> 87 = 91
+                plain += (char)((index) + 91);
+
+            } else {
+
+                 plain += (char)((index) + 65);
+            }
+           
+        }
 
         return plain;
     }
+    
 
     /**
      * Will encrypt text using the Hill encryption scheme.
@@ -698,6 +723,25 @@ public class App {
     public static String parseString(String text) {
 
         return text.replaceAll("\\s+", "");
+    }
+
+    public static String getMirror(String plain, String keyword) {
+
+        String mirror = "";
+        int curr = 0;
+
+        for (char c : plain.toCharArray()) {
+
+            if (curr == keyword.length()) {
+
+                curr = 0;
+            } 
+
+            mirror += keyword.charAt(curr);
+            curr++;
+
+        }
+        return mirror.toUpperCase();
     }
 
     /**
