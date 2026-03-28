@@ -32,7 +32,7 @@ public class App {
      * @param args
      */
     public static void main(String[] args) {
-         
+
         Scanner in = new Scanner(System.in);
         String plain;
         String cipher;
@@ -64,12 +64,15 @@ public class App {
 
                         break;
 
-            case 3 :    
+            case 3 :    String keyword = getKeyword().toUpperCase();
+                        plain = parseString(getMessage()).toUpperCase();
+                        vigenere(plain, keyword);
 
             case 4 :
 
-            case 5 :    plain = getMessage();
-
+            case 5 :    plain = parseString(getMessage()).toUpperCase();
+                        print(plain);
+                        System.exit(0);
                         Map<String, Integer> cipherMap = new LinkedHashMap<>();
                         cipherMap = playfair(plain);
 
@@ -209,16 +212,6 @@ public class App {
         }
         
         return plain;
-    }
-
-    public static String vigenere() {
-
-        return "";
-    }
-
-    public static String vigenereX() {
-
-        return "";
     }
 
     public static String affine() {
@@ -489,6 +482,36 @@ public class App {
         return plain;
     }
 
+    public static String vigenere(String plain, String keyword) {
+
+        String cipher = "";
+        String mirror = "";
+        int curr = 0;
+
+        for (char c : plain.toCharArray()) {
+
+            if (curr == keyword.length()) {
+
+                curr = 0;
+            } 
+
+            mirror += keyword.charAt(curr);
+            curr++;
+
+        }
+
+        System.out.println(mirror);
+
+        return cipher;
+    }
+
+    public static String vigenereX(String cipher) {
+
+        String plain = "";
+
+        return plain;
+    }
+
     /**
      * Will encrypt text using the Hill encryption scheme.
      * 
@@ -608,6 +631,17 @@ public class App {
         return key;
     }
 
+    public static String getKeyword() {
+
+        Scanner in = new Scanner(System.in);
+        String word = "";
+
+        System.out.println("Enter keyword (letters only) : ");
+        word = in.nextLine();
+
+        return word;
+    }
+
     /**
      * Will convert a passed integer into its corresponding ASCII value.
      * 
@@ -656,9 +690,14 @@ public class App {
         return exist;
     }
 
-    public static String toUpper(String text) {
+    public static void print(String text) {
 
-        return "";
+        System.out.println(text);
+    }
+
+    public static String parseString(String text) {
+
+        return text.replaceAll("\\s+", "");
     }
 
     /**
