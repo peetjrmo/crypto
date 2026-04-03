@@ -21,8 +21,11 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
+
+
 public class App {
 
+    static Map<Character, Integer> alpha = new HashMap<>();
     static int key;
 
     /**
@@ -53,7 +56,7 @@ public class App {
             case 2 :    Map<Character, ArrayList<Integer>> map = new HashMap<>();
                         ArrayList<Integer> cipherList = new ArrayList<>();
 
-                        plain = getMessage();
+                        plain = parseString(getMessage());
 
                         cipherList = homophonic(plain, map);
                         plain = homoPhonicX(cipherList, map);
@@ -63,7 +66,8 @@ public class App {
 
                         break;
 
-            case 3 :    String keyword = getKeyword().toUpperCase();
+            case 3 :    int num1, num2;
+                        String keyword = getKeyword().toUpperCase();
                         plain = parseString(getMessage()).toUpperCase();
                         String mirror = getMirror(plain, keyword);
                         
@@ -75,7 +79,29 @@ public class App {
                         print("PLAIN : " + plain);
                         break;
 
-            case 4 :
+            case 4 :    plain = parseString(getMessage());
+                            
+                        do {
+
+                            System.out.print("Enter first number: ");
+                            num1 = in.nextInt();
+
+                            System.out.print("Enter second number: ");
+                            num2 = in.nextInt();
+
+                            if (isCoPrime(num1, num2)) {
+
+                                System.out.println(num1 + " and " + num2 + " are Co-prime numbers");
+
+                            } else {
+
+                                System.out.println(num1 + " and " + num2 + " are NOT Co-prime numbers");
+
+                            }
+
+                        } while (!(isCoPrime(num1, num2)));
+        
+                        affine(plain, num1, num2);
 
             case 5 :    plain = parseString(getMessage()).toUpperCase();
                         print(plain);
@@ -84,7 +110,8 @@ public class App {
                         cipherMap = playfair(plain);
                         break;
 
-            case 6 : 
+            case 6 :    
+                        hill("");
 
 
             case 7 :    print("Bye!");
@@ -222,12 +249,21 @@ public class App {
         return plain;
     }
 
-    public static String affine() {
+    public static String affine(String plain, int a, int b) {
 
-        return "";
+        String cipher = "";
+
+        
+        for (int i = 0; i < plain.length(); ++i) {
+            // cipher += (a*alpha. + b) mod 26
+            cipher += (char)(((a * alpha.get(plain.charAt(i)) + b) % 26) + 65);
+        }
+        System.out.println("CIPHER: " + cipher);
+
+        return cipher;
     }
 
-    public static String affineX() {
+    public static String affineX(String cipher, int a, int b) {
 
         return "";
     }
@@ -722,7 +758,7 @@ public class App {
 
     public static String parseString(String text) {
 
-        return text.replaceAll("\\s+", "");
+        return (text.replaceAll("\\s+", "")).toUpperCase();
     }
 
     public static String getMirror(String plain, String keyword) {
@@ -759,5 +795,22 @@ public class App {
         opt = in.nextInt();
 
         return opt;
+    }
+
+    public static int gcd(int a, int b) {
+
+        while (b != 0) {
+
+            int temp = b;
+            b = a % b;
+            a = temp;
+        }
+        
+        return a;
+    }
+
+    public static boolean isCoPrime(int a, int b) {
+        
+        return gcd(a, b) == 1;
     }
 }
