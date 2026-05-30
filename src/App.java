@@ -25,7 +25,8 @@ import java.util.Set;
 
 public class App {
 
-    static Map<Character, Integer> alpha = new HashMap<>();
+    static Map<Character, Integer> alpha = new HashMap<>(26);
+
     static int key;
 
     /**
@@ -49,14 +50,17 @@ public class App {
                         key = getKey();
 
                         cipher = ceasar(plain);
+                        print("Ciphertext : " + cipher);
+
                         plain = ceasarX(cipher, key);
+                        print("Plaintext : " + plain);
 
                         break;
 
             case 2 :    Map<Character, ArrayList<Integer>> map = new HashMap<>();
                         ArrayList<Integer> cipherList = new ArrayList<>();
 
-                        plain = parseString(getMessage());
+                        plain = getMessage();
 
                         cipherList = homophonic(plain, map);
                         plain = homoPhonicX(cipherList, map);
@@ -66,20 +70,24 @@ public class App {
 
                         break;
 
-            case 3 :    int num1, num2;
+            case 3 :    plain = parseString(getMessage());
+
                         String keyword = getKeyword().toUpperCase();
-                        plain = parseString(getMessage()).toUpperCase();
                         String mirror = getMirror(plain, keyword);
-                        
+
+                        System.out.println("Mirror : " + mirror);
+
                         cipher = vigenere(plain, mirror);
-                        print("Plain : " + plain);
+                        print("Ciphertext: " + cipher);
                         
                         plain = vigenereX(cipher, getMirror(plain, keyword));
-                        print("CIPHER : " + cipher);
-                        print("PLAIN : " + plain);
+                        print("Plaintext: " + plain);
+                        
                         break;
 
-            case 4 :    plain = parseString(getMessage());
+            case 4 :    initAlpha();
+                        int num1, num2;
+                        plain = parseString(getMessage());
                             
                         do {
 
@@ -101,11 +109,18 @@ public class App {
 
                         } while (!(isCoPrime(num1, num2)));
         
-                        affine(plain, num1, num2);
+                        cipher = affine(plain, num1, num2);
+                        System.out.println("Ciphertext: " + cipher);
 
-            case 5 :    plain = parseString(getMessage()).toUpperCase();
-                        print(plain);
-                        System.exit(0);
+                        plain = affineX(cipher, num1, num2);
+                        System.out.println("Plaintext: " + plain);
+
+                        break;
+                        
+
+            case 5 :    plain = parseString(getMessage());
+                        print("Plaintext : " + plain);
+                        
                         Map<String, Integer> cipherMap = new LinkedHashMap<>();
                         cipherMap = playfair(plain);
                         break;
@@ -188,9 +203,9 @@ public class App {
      */
     public static ArrayList<Integer> homophonic(String plain, Map<Character, ArrayList<Integer>> map) {
 
-        ArrayList<Integer> vals = new ArrayList<>();                // List of random ints free of duplicates
+        ArrayList<Integer> vals = new ArrayList<>();         // List of random ints free of duplicates
         ArrayList<Integer> cipher = new ArrayList<>();
-         ArrayList<Integer> temp;
+        ArrayList<Integer> temp;
 
         Random rand = new Random();
         int num;
@@ -250,22 +265,35 @@ public class App {
     }
 
     public static String affine(String plain, int a, int b) {
-
+        
         String cipher = "";
 
-        
+        // plain = poohkie
+        // a = 5, b = 4
         for (int i = 0; i < plain.length(); ++i) {
             // cipher += (a*alpha. + b) mod 26
             cipher += (char)(((a * alpha.get(plain.charAt(i)) + b) % 26) + 65);
         }
-        System.out.println("CIPHER: " + cipher);
 
         return cipher;
     }
 
     public static String affineX(String cipher, int a, int b) {
 
-        return "";
+        String plain = "";
+        int a_inv = getModInv(a);
+        System.out.println("FORMULA: a_inv(y - b) % 26\n");
+
+        for (int i = 0; i < cipher.length(); ++i) {
+            //System.out.println("this char : " + cipher.charAt(i));
+            //System.out.println("this value : " + alpha.get(cipher.charAt(i)) + '\n');
+            
+
+            System.out.println("FORMULA: " + a_inv + "(" + alpha.get(cipher.charAt(i)) + " - " + b + ")" + " % 26\n");
+            plain += (char)(((a_inv*(alpha.get(cipher.charAt(i)) - b) % 26 + 26) % 26) + 65);
+        }
+
+        return plain;
     }
 
 
@@ -526,6 +554,13 @@ public class App {
         return plain;
     }
 
+    /**
+     * Will encrypt text with the Vigenere cipher.
+     * 
+     * @param plain     plaintext message
+     * @param mirror    
+     * @return
+     */
     public static String vigenere(String plain, String mirror) {
 
         String cipher = "";
@@ -689,6 +724,8 @@ public class App {
                         break;
         }
 
+        System.out.println("Key: " + key);
+
         return key;
     }
 
@@ -812,5 +849,38 @@ public class App {
     public static boolean isCoPrime(int a, int b) {
         
         return gcd(a, b) == 1;
+    }
+
+    public static void initAlpha() {
+
+        for (int i = 0; i < 26; ++i) {
+
+            alpha.put((char)(i + 65), i);
+        }
+        System.out.println(alpha);
+        
+    }
+
+    public static int getModInv(int a) {
+
+        int inv = 0;
+        boolean found = false;
+
+        do {
+
+            if (((a * inv) % 26) == 1) {
+
+                found = true;
+                System.out.println("Inverse: " + inv);
+
+            } else {
+
+                inv++;
+            }
+
+
+        } while (!found && inv < 26);
+        
+        return inv;
     }
 }
