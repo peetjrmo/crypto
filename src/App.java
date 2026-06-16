@@ -6,7 +6,6 @@
  * - Vigenere Cipher
  * - Affine Cipher
  * - Playfair Cipher
- * - Hill Cipher
  * 
  * @author MPJ
  * @version 2.22.26
@@ -21,8 +20,6 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 
-
-
 public class App {
 
     static Map<Character, Integer> alpha = new HashMap<>(26);
@@ -30,7 +27,7 @@ public class App {
     static int key;
 
     /**
-     * [...]
+     * Will prompt user to provide plaintext with menu to select method with which to encrypt / decrypt.
      * 
      * @param args
      */
@@ -125,11 +122,7 @@ public class App {
                         cipherMap = playfair(plain);
                         break;
 
-            case 6 :    
-                        hill("");
-
-
-            case 7 :    print("Bye!");
+            case 6 :    print("Goodbye!");
                         break;
         }
     }
@@ -264,6 +257,14 @@ public class App {
         return plain;
     }
 
+    /**
+     * Will encrypt text using the Affine cipher.
+     * 
+     * @param plain     plaintext message
+     * @param a         multiplicative key
+     * @param b         additive key
+     * @return          ciphertext message
+     */
     public static String affine(String plain, int a, int b) {
         
         String cipher = "";
@@ -278,24 +279,31 @@ public class App {
         return cipher;
     }
 
+    /**
+     * Will decrypt text encrypted with the Affine cipher.
+     * 
+     * @param cipher    ciphertext message
+     * @param a         multiplicative key 
+     * @param b         additive key
+     * @return          plaintext messge
+     */
     public static String affineX(String cipher, int a, int b) {
 
         String plain = "";
         int a_inv = getModInv(a);
-        System.out.println("FORMULA: a_inv(y - b) % 26\n");
+        //4System.out.println("FORMULA: a_inv(y - b) % 26\n");
 
         for (int i = 0; i < cipher.length(); ++i) {
             //System.out.println("this char : " + cipher.charAt(i));
             //System.out.println("this value : " + alpha.get(cipher.charAt(i)) + '\n');
             
 
-            System.out.println("FORMULA: " + a_inv + "(" + alpha.get(cipher.charAt(i)) + " - " + b + ")" + " % 26\n");
+            //System.out.println("FORMULA: " + a_inv + "(" + alpha.get(cipher.charAt(i)) + " - " + b + ")" + " % 26\n");
             plain += (char)(((a_inv*(alpha.get(cipher.charAt(i)) - b) % 26 + 26) % 26) + 65);
         }
 
         return plain;
     }
-
 
     /**
      * Will encrypt text using the Playfair encryption scheme.
@@ -558,8 +566,8 @@ public class App {
      * Will encrypt text with the Vigenere cipher.
      * 
      * @param plain     plaintext message
-     * @param mirror    
-     * @return
+     * @param mirror    keyword (repeated)
+     * @return          ciphertext message
      */
     public static String vigenere(String plain, String mirror) {
 
@@ -581,6 +589,13 @@ public class App {
         return cipher;
     }
 
+    /**
+     * Will decrypt text encrypted with the Vigenere cipher.
+     * 
+     * @param cipher    ciphertext message
+     * @param mirror    keyword (repeated)
+     * @return          plaintext message
+     */
     public static String vigenereX(String cipher, String mirror) {
 
         String plain = "";
@@ -606,30 +621,12 @@ public class App {
 
         return plain;
     }
-    
 
     /**
-     * Will encrypt text using the Hill encryption scheme.
+     * Prompts user for plaintext message.
      * 
-     * @param plain plaintext message
-     * @return      ciphertext message
+     * @return  plaintext message
      */
-    public static String hill(String plain) {
-
-        return "";
-    }
-
-    /**
-     * Will decrypt text encrypted with the Hill cipher.
-     * 
-     * @param cipher    ciphertext message
-     * @return          plaintext message
-     */
-    public static String hillX() {
-
-        return "";
-    }
-
     public static String getMessage() {
 
         Scanner in = new Scanner(System.in);
@@ -729,6 +726,11 @@ public class App {
         return key;
     }
 
+    /**
+     * Prompts user for keyword.
+     * 
+     * @return  keyword
+     */
     public static String getKeyword() {
 
         Scanner in = new Scanner(System.in);
@@ -788,16 +790,34 @@ public class App {
         return exist;
     }
 
+    /**
+     * Prints passed String to the standard output.
+     * 
+     * @param text  text to print
+     */
     public static void print(String text) {
 
         System.out.println(text);
     }
 
+    /**
+     * Takes in a String and converts to uppercase for normalization.
+     * 
+     * @param text  text to convert
+     * @return      parsed text
+     */
     public static String parseString(String text) {
 
         return (text.replaceAll("\\s+", "")).toUpperCase();
     }
 
+    /**
+     * Mirrors keyword by repeating itself alongside the plaintext.
+     * 
+     * @param plain     plaintext message
+     * @param keyword   keyword
+     * @return          repeated keyword
+     */
     public static String getMirror(String plain, String keyword) {
 
         String mirror = "";
@@ -827,13 +847,20 @@ public class App {
         Scanner in = new Scanner(System.in);
         int opt;
 
-        System.out.println("Chhose encryption method :\n");
-        System.out.println("1) Ceasar\n2) Homophonic\n3) Vigenere\n4) Affine\n5) Playfair\n6) Hill\n");
+        System.out.println("Choose encryption method :\n");
+        System.out.println("1) Ceasar\n2) Homophonic\n3) Vigenere\n4) Affine\n5) Playfair\n6) Exit");
         opt = in.nextInt();
 
         return opt;
     }
-
+    
+    /**
+     * Performs GCD on passed integers.
+     * 
+     * @param a integer 1
+     * @param b integer
+     * @return  greatest common divisor between 'a' and 'b'
+     */
     public static int gcd(int a, int b) {
 
         while (b != 0) {
@@ -846,21 +873,36 @@ public class App {
         return a;
     }
 
+    /**
+     * Checks to see if two integers are coprime with one another.
+     * 
+     * @param a first integer
+     * @param b second integer
+     * @return  True if 'a' and 'b' are coprime, false otherwise
+     */
     public static boolean isCoPrime(int a, int b) {
         
         return gcd(a, b) == 1;
     }
 
+    /**
+     * Initializes alphabetic map.
+     */
     public static void initAlpha() {
 
         for (int i = 0; i < 26; ++i) {
 
             alpha.put((char)(i + 65), i);
         }
-        System.out.println(alpha);
-        
+        System.out.println(alpha);        
     }
 
+    /**
+     * Returns the modular inverse of integer 'a'
+     * 
+     * @param a integer to find modular inverse of
+     * @return  modular inverse of 'a'
+     */
     public static int getModInv(int a) {
 
         int inv = 0;
@@ -877,7 +919,6 @@ public class App {
 
                 inv++;
             }
-
 
         } while (!found && inv < 26);
         
